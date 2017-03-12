@@ -10,6 +10,8 @@ $ yarn start # webpack-dev-server --inline --hot --port 3000
 
 ### これの中身：メモビューア
 
+![メモビューア](http://www.rinsymbol.sakura.ne.jp/github_images/my_react_study_memo_app.png "メモビューア")
+
 #### 今回の目的
 
 * やりたかったこと
