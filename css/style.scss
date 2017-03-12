@@ -1,0 +1,91 @@
+@charset "utf-8";
+
+// ボタンサイズ
+$btnSize: 60px;
+$btnRadius: 60px;
+
+// ボタンカラー
+$btnCircleNormal: #40AAEF;
+$btnCircleHover: #33BFDB;
+
+
+main {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+
+.btn_circle {
+    width: $btnSize;
+    height: $btnSize;
+    border-radius: $btnRadius $btnRadius;
+    background-color: $btnCircleNormal;
+    border: none;
+    text-align: center;
+    line-height: 4.2rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    &:hover {
+        background-color: $btnCircleHover;
+        cursor: pointer;
+    }
+}
+
+.btn_circle .fa {
+    font-size: 1.6rem;
+    color: #ECEEF1;
+}
+
+
+.area_side {
+    width: 10vh;
+    height: 100vh;
+    justify-content: flex-start;
+    background-color:#0e7ac4;
+}
+
+.area_archive {
+    width: 50vh;
+    justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: auto;
+    border-right: 1px solid #999;
+
+    & section {
+        width: 50vh;
+        height: calc(20% - 10px);
+        border-bottom: 1px solid #ddd;
+        padding: 20px;
+
+        & icon_delete {
+            text-align: right;
+        }
+
+        &:hover {
+            background-color: #40AAEF;
+            cursor: pointer;
+        }
+    }
+    & header {
+        font-weight: bold;
+        & title_memo {
+            
+        }
+    }
+}
+
+.area_editor {
+    width: 60vh;
+
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-left: 20px;
+    padding-right: -20px;
+    padding-bottom: -20px;
+    
+}
