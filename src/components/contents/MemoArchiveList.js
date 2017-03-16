@@ -10,8 +10,6 @@ export default class MemoArchiveList extends React.Component {
     constructor(props) {
         super(props);
         this.memoArchiveList = this.props.memoList;
-
-        console.log(this.props.memoList);
     }
 
     /**
@@ -20,7 +18,7 @@ export default class MemoArchiveList extends React.Component {
     render() {
         const memoArchiveList = this.memoArchiveList.map((memo) => {
             return (
-                <MemoArchiveCard 
+                <MemoArchiveCard key={memo.key}
                     memoData={memo} 
                     handleMemoClick={this.props.handleMemoArchiveListClick}
                 />

@@ -23,11 +23,39 @@ class App extends React.Component {
      */
     constructor(props) {
         super(props);
+
+        // 最初の表示するメモの設定
+        let firstKey = this.props.memoList.length;
+        let firstTitle = this.props.memoList[firstKey - 1].title;
+        let firstContents = this.props.memoList[firstKey - 1].contents;
+        // 全くメモが格納されていない場合、空白で表示しておく
+
+        if(firstKey === 0) {
+            firstKey = 1;
+            firstTitle = '';
+            firstContents = '';
+        }
+
         this.state = {
-            memoList: this.props.memoList,
+            memoList: this.props.memoList.sort( (a, b) => {
+                if(a.key < b.key) {
+                    return 1;
+                }
+                if(a.key > b.key) {
+                    return -1;
+                }
+                return 0;
+            }),
+            editorData: {
+                key: firstKey,
+                title: firstTitle,
+                contents: firstContents,
+            },
         };
 
         this.sendCardToEditor = this.sendCardToEditor.bind(this);
+        this.saveCardToState = this.saveCardToState.bind(this);
+        this.addMemoCard = this.addMemoCard.bind(this);
     }
 
     /**
@@ -41,12 +69,55 @@ class App extends React.Component {
     }
 
     /**
+     * 
+     * @param {Object} memoData 
+     */
+    saveCardToState(memoData) {
+        // memo.keyがブランクの場合、新規作成
+        let memoList = this.state.memoList;
+        
+        // TODO: 要リファクタリング
+        let exists = false;
+        for(let i = 0; i < memoList.length; i++) {
+            if(memoList[i].key === memoData.key) {
+                memoList[i].title = memoData.title;
+                memoList[i].contents = memoData.contents;
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) {
+            memoList.unshift(memoData);
+        }
+        // memoList.push(memoData);
+        this.setState({
+            memoList: memoList,
+            editorData: memoData,
+        });
+    }
+
+    /**
+     * 
+     */
+    addMemoCard() {
+        // console.table(this.state.memoList);
+        let newMemoData = {
+            key: this.state.memoList.length + 1,
+            title: '',
+            contents: '',
+        };
+        this.setState({
+            editorData: newMemoData,
+        });
+    }
+
+    /**
      * @return {ReactComponent} 
      */
     render() {
         return (
             <main>
-                <MemoSideMenu />
+                <MemoSideMenu addMemoCard={this.addMemoCard} />
                 
                 <MemoArchiveList 
                     memoList={this.state.memoList}
@@ -56,7 +127,10 @@ class App extends React.Component {
                     handleMemoArchiveListClick={this.sendCardToEditor}
                 />
                 {/* Editorデータが存在する場合のみ表示される */}
-                <MemoEditor memoData={this.state.editorData}/>
+                <MemoEditor 
+                    memoData={this.state.editorData}
+                    saveCardToState={this.saveCardToState}
+                />
             </main>
         );
     }
@@ -64,13 +138,12 @@ class App extends React.Component {
 
 let dataList = [
     {key: 1, title: 'Python', contents: 'pip'},
-    {key: 2, title: 'JavaScript', contents: 'npm'},
-    {key: 3, title: 'PHP', contents: 'composer'},
-    {key: 4, title: 'Ruby', contents: 'gem'},
-    {key: 5, title: 'Mac', contents: 'brew/port'},
-    {key: 6, title: 'RedHat/CentOS', contents: 'rpm/yum'},
-    {key: 7, title: 'Debian/Ubuntu', contents: 'apt'},
-    {key: 8, title: 'Windows', contents: 'chocolatey'},
+    {key: 2, title: 'PHP', contents: 'composer'},
+    {key: 3, title: 'Ruby', contents: 'gem'},
+    {key: 4, title: 'Mac', contents: 'brew/port'},
+    {key: 5, title: 'RedHat/CentOS', contents: 'rpm/yum'},
+    {key: 6, title: 'Debian/Ubuntu', contents: 'apt'},
+    {key: 7, title: 'JavaScript', contents: 'npm/yarn'},
 ];
 
 render(

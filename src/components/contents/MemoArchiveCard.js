@@ -33,7 +33,6 @@ export default class MemoArchiveCard extends React.Component {
      * @param {React.Event} e 
      */
     archiveCardClick(e) {
-        console.log(this.memoData.key);
         this.props.handleMemoClick(this.memoData);
     }
 

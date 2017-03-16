@@ -9500,8 +9500,6 @@ var MemoArchiveList = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (MemoArchiveList.__proto__ || Object.getPrototypeOf(MemoArchiveList)).call(this, props));
 
         _this.memoArchiveList = _this.props.memoList;
-
-        console.log(_this.props.memoList);
         return _this;
     }
 
@@ -9516,7 +9514,7 @@ var MemoArchiveList = function (_React$Component) {
             var _this2 = this;
 
             var memoArchiveList = this.memoArchiveList.map(function (memo) {
-                return _react2.default.createElement(_MemoArchiveCard2.default, {
+                return _react2.default.createElement(_MemoArchiveCard2.default, { key: memo.key,
                     memoData: memo,
                     handleMemoClick: _this2.props.handleMemoArchiveListClick
                 });
@@ -9560,6 +9558,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
+ * メニューエディタ
  * @classdesc MenuEditor
  */
 var MenuEditor = function (_React$Component) {
@@ -9572,41 +9571,105 @@ var MenuEditor = function (_React$Component) {
     function MenuEditor(props) {
         _classCallCheck(this, MenuEditor);
 
-        return _possibleConstructorReturn(this, (MenuEditor.__proto__ || Object.getPrototypeOf(MenuEditor)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (MenuEditor.__proto__ || Object.getPrototypeOf(MenuEditor)).call(this, props));
+
+        _this.state = {
+            title: _this.props.memoData.title,
+            contents: _this.props.memoData.contents
+        };
+
+        // 保存ボタン
+        _this.handleSaveButtonClick = _this.handleSaveButtonClick.bind(_this);
+        // title状態変更時のハンドリング
+        _this.handleOnTitleChange = _this.handleOnTitleChange.bind(_this);
+        // contents状態変更時のハンドリング
+        _this.handleOnContentsChange = _this.handleOnContentsChange.bind(_this);
+        return _this;
     }
+
     /**
-     * @return {React.Component}
+     * 
+     * @param {React.Event} e 
      */
 
 
     _createClass(MenuEditor, [{
+        key: 'handleSaveButtonClick',
+        value: function handleSaveButtonClick(e) {
+            var memoObj = {
+                'key': this.props.memoData.key,
+                'title': this.state.title,
+                'contents': this.state.contents
+            };
+            this.props.saveCardToState(memoObj);
+        }
+
+        /**
+         *  タイトル変更時のハンドリング
+         * @param {React.Event} e
+         */
+
+    }, {
+        key: 'handleOnTitleChange',
+        value: function handleOnTitleChange(e) {
+            this.setState({ title: e.target.value });
+        }
+
+        /**
+         * コンテンツ変更時のハンドリング
+         * @param {React.Event} e
+         */
+
+    }, {
+        key: 'handleOnContentsChange',
+        value: function handleOnContentsChange(e) {
+            this.setState({ contents: e.target.value });
+        }
+
+        /**
+         * propsが更新されたとき
+         * - 受け取ったnextPropsのmemoDataで更新する
+         * @param {Object} nextProps 
+         */
+
+    }, {
+        key: 'componentWillReceiveProps',
+        value: function componentWillReceiveProps(nextProps) {
+            this.setState({
+                title: nextProps.memoData.title,
+                contents: nextProps.memoData.contents
+            });
+        }
+
+        /**
+         * @return {React.Component}
+         */
+
+    }, {
         key: 'render',
         value: function render() {
-            var editorTitle = '';
-            var editorContents = '';
-            if (this.props.memoData !== undefined) {
-                editorTitle = this.props.memoData.title;
-                editorContents = this.props.memoData.contents;
-            }
             return _react2.default.createElement(
                 'article',
                 { className: 'area_editor' },
                 _react2.default.createElement(
                     'section',
                     null,
-                    _react2.default.createElement(
-                        'h1',
-                        null,
-                        editorTitle
-                    )
+                    _react2.default.createElement('input', {
+                        value: this.state.title,
+                        onChange: this.handleOnTitleChange
+                    })
                 ),
                 _react2.default.createElement(
                     'section',
                     null,
+                    _react2.default.createElement('textarea', {
+                        value: this.state.contents,
+                        onChange: this.handleOnContentsChange
+                    }),
                     _react2.default.createElement(
-                        'p',
-                        null,
-                        editorContents
+                        'button',
+                        { onClick: this.handleSaveButtonClick },
+                        '\u4FDD\u5B58'
                     )
                 )
             );
@@ -9665,9 +9728,10 @@ var MemoSideMenu = function (_React$Component) {
 
 
     _createClass(MemoSideMenu, [{
-        key: 'addMemoClick',
+        key: "addMemoClick",
         value: function addMemoClick(e) {
-            console.log('addMemoClick');
+            // 新規メモの作成
+            this.props.addMemoCard();
         }
 
         /**
@@ -9675,10 +9739,8 @@ var MemoSideMenu = function (_React$Component) {
          */
 
     }, {
-        key: 'searchMemoClick',
-        value: function searchMemoClick(e) {
-            console.log('searchMemoClick');
-        }
+        key: "searchMemoClick",
+        value: function searchMemoClick(e) {}
 
         /**
          * @return {ReactComponent}
@@ -9686,37 +9748,37 @@ var MemoSideMenu = function (_React$Component) {
          */
 
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
             var _this2 = this;
 
             return _react2.default.createElement(
-                'article',
-                { className: 'area_side' },
+                "article",
+                { className: "area_side" },
                 _react2.default.createElement(
-                    'nav',
+                    "nav",
                     null,
                     _react2.default.createElement(
-                        'div',
+                        "div",
                         {
-                            className: 'btn_circle',
-                            id: 'add_memo',
+                            className: "btn_circle",
+                            id: "add_memo",
                             onClick: function onClick(e) {
                                 _this2.addMemoClick();
                             }
                         },
-                        _react2.default.createElement('i', { className: 'fa fa-plus', 'aria-hidden': 'true' })
+                        _react2.default.createElement("i", { className: "fa fa-plus", "aria-hidden": "true" })
                     ),
                     _react2.default.createElement(
-                        'div',
+                        "div",
                         {
-                            className: 'btn_circle',
-                            id: 'search_memo',
+                            className: "btn_circle",
+                            id: "search_memo",
                             onClick: function onClick(e) {
                                 _this2.searchMemoClick();
                             }
                         },
-                        _react2.default.createElement('i', { className: 'fa fa-search', 'aria-hidden': 'true' })
+                        _react2.default.createElement("i", { className: "fa fa-search", "aria-hidden": "true" })
                     )
                 )
             );
@@ -9807,7 +9869,6 @@ var MemoArchiveCard = function (_React$Component) {
     }, {
         key: "archiveCardClick",
         value: function archiveCardClick(e) {
-            console.log(this.memoData.key);
             this.props.handleMemoClick(this.memoData);
         }
 
@@ -22167,13 +22228,40 @@ var App = function (_React$Component) {
     function App(props) {
         _classCallCheck(this, App);
 
+        // 最初の表示するメモの設定
         var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
+        var firstKey = _this.props.memoList.length;
+        var firstTitle = _this.props.memoList[firstKey - 1].title;
+        var firstContents = _this.props.memoList[firstKey - 1].contents;
+        // 全くメモが格納されていない場合、空白で表示しておく
+
+        if (firstKey === 0) {
+            firstKey = 1;
+            firstTitle = '';
+            firstContents = '';
+        }
+
         _this.state = {
-            memoList: _this.props.memoList
+            memoList: _this.props.memoList.sort(function (a, b) {
+                if (a.key < b.key) {
+                    return 1;
+                }
+                if (a.key > b.key) {
+                    return -1;
+                }
+                return 0;
+            }),
+            editorData: {
+                key: firstKey,
+                title: firstTitle,
+                contents: firstContents
+            }
         };
 
         _this.sendCardToEditor = _this.sendCardToEditor.bind(_this);
+        _this.saveCardToState = _this.saveCardToState.bind(_this);
+        _this.addMemoCard = _this.addMemoCard.bind(_this);
         return _this;
     }
 
@@ -22192,6 +22280,55 @@ var App = function (_React$Component) {
         }
 
         /**
+         * 
+         * @param {Object} memoData 
+         */
+
+    }, {
+        key: 'saveCardToState',
+        value: function saveCardToState(memoData) {
+            // memo.keyがブランクの場合、新規作成
+            var memoList = this.state.memoList;
+
+            // TODO: 要リファクタリング
+            var exists = false;
+            for (var i = 0; i < memoList.length; i++) {
+                if (memoList[i].key === memoData.key) {
+                    memoList[i].title = memoData.title;
+                    memoList[i].contents = memoData.contents;
+                    exists = true;
+                    break;
+                }
+            }
+            if (!exists) {
+                memoList.unshift(memoData);
+            }
+            // memoList.push(memoData);
+            this.setState({
+                memoList: memoList,
+                editorData: memoData
+            });
+        }
+
+        /**
+         * 
+         */
+
+    }, {
+        key: 'addMemoCard',
+        value: function addMemoCard() {
+            // console.table(this.state.memoList);
+            var newMemoData = {
+                key: this.state.memoList.length + 1,
+                title: '',
+                contents: ''
+            };
+            this.setState({
+                editorData: newMemoData
+            });
+        }
+
+        /**
          * @return {ReactComponent} 
          */
 
@@ -22201,7 +22338,7 @@ var App = function (_React$Component) {
             return _react2.default.createElement(
                 'main',
                 null,
-                _react2.default.createElement(_MemoSideMenu2.default, null),
+                _react2.default.createElement(_MemoSideMenu2.default, { addMemoCard: this.addMemoCard }),
                 _react2.default.createElement(_MemoArchiveList2.default, {
                     memoList: this.state.memoList
                     // memoDataをarchiveCardから受け取るための
@@ -22209,7 +22346,10 @@ var App = function (_React$Component) {
                     // 横流しする
                     , handleMemoArchiveListClick: this.sendCardToEditor
                 }),
-                _react2.default.createElement(_MemoEditor2.default, { memoData: this.state.editorData })
+                _react2.default.createElement(_MemoEditor2.default, {
+                    memoData: this.state.editorData,
+                    saveCardToState: this.saveCardToState
+                })
             );
         }
     }]);
@@ -22217,7 +22357,7 @@ var App = function (_React$Component) {
     return App;
 }(_react2.default.Component);
 
-var dataList = [{ key: 1, title: 'Python', contents: 'pip' }, { key: 2, title: 'JavaScript', contents: 'npm' }, { key: 3, title: 'PHP', contents: 'composer' }, { key: 4, title: 'Ruby', contents: 'gem' }, { key: 5, title: 'Mac', contents: 'brew/port' }, { key: 6, title: 'RedHat/CentOS', contents: 'rpm/yum' }, { key: 7, title: 'Debian/Ubuntu', contents: 'apt' }, { key: 8, title: 'Windows', contents: 'chocolatey' }];
+var dataList = [{ key: 1, title: 'Python', contents: 'pip' }, { key: 2, title: 'PHP', contents: 'composer' }, { key: 3, title: 'Ruby', contents: 'gem' }, { key: 4, title: 'Mac', contents: 'brew/port' }, { key: 5, title: 'RedHat/CentOS', contents: 'rpm/yum' }, { key: 6, title: 'Debian/Ubuntu', contents: 'apt' }, { key: 7, title: 'JavaScript', contents: 'npm/yarn' }];
 
 (0, _reactDom.render)(_react2.default.createElement(App, { memoList: dataList }), document.getElementById('container'));
 

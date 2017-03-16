@@ -16,14 +16,14 @@ export default class MemoSideMenu extends React.Component {
      * @param {React.EventHandler} e
      */
     addMemoClick(e) {
-        console.log('addMemoClick');
+        // 新規メモの作成
+        this.props.addMemoCard();
     }
 
     /**
      * @param {React.EventHandler} e
      */
     searchMemoClick(e) {
-        console.log('searchMemoClick');
     }
 
     /**
