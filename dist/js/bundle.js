@@ -9516,7 +9516,8 @@ var MemoArchiveList = function (_React$Component) {
             var memoArchiveList = this.memoArchiveList.map(function (memo) {
                 return _react2.default.createElement(_MemoArchiveCard2.default, { key: memo.key,
                     memoData: memo,
-                    handleMemoClick: _this2.props.handleMemoArchiveListClick
+                    handleMemoClick: _this2.props.handleMemoArchiveListClick,
+                    handleTrashIconClick: _this2.props.handleTrashIconClick
                 });
             });
             return _react2.default.createElement(
@@ -9842,6 +9843,7 @@ var MemoArchiveCard = function (_React$Component) {
         _this.memoData = _this.props.memoData;
 
         _this.archiveCardClick = _this.archiveCardClick.bind(_this);
+        _this.trashIconClick = _this.trashIconClick.bind(_this);
         return _this;
     }
 
@@ -9873,6 +9875,16 @@ var MemoArchiveCard = function (_React$Component) {
         }
 
         /**
+         * @param {React.Event} e
+         */
+
+    }, {
+        key: "trashIconClick",
+        value: function trashIconClick(e) {
+            this.props.handleTrashIconClick(this.memoData);
+        }
+
+        /**
          * @return {ReactComponent} 
          */
 
@@ -9883,17 +9895,29 @@ var MemoArchiveCard = function (_React$Component) {
                 "section",
                 { onClick: this.archiveCardClick },
                 _react2.default.createElement(
+                    "nav",
+                    null,
+                    _react2.default.createElement(
+                        "span",
+                        { className: "icon_delete" },
+                        _react2.default.createElement(
+                            "a",
+                            { onClick: this.trashIconClick },
+                            _react2.default.createElement(
+                                "i",
+                                { className: "fa fa-trash-o" },
+                                " "
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
                     "header",
                     null,
                     _react2.default.createElement(
                         "span",
                         { className: "title_memo" },
                         this.memoData.title
-                    ),
-                    _react2.default.createElement(
-                        "span",
-                        { className: "icon_delete" },
-                        _react2.default.createElement("a", { href: "#" })
                     )
                 ),
                 _react2.default.createElement(
@@ -22262,6 +22286,7 @@ var App = function (_React$Component) {
         _this.sendCardToEditor = _this.sendCardToEditor.bind(_this);
         _this.saveCardToState = _this.saveCardToState.bind(_this);
         _this.addMemoCard = _this.addMemoCard.bind(_this);
+        _this.removeMemoCard = _this.removeMemoCard.bind(_this);
         return _this;
     }
 
@@ -22329,6 +22354,29 @@ var App = function (_React$Component) {
         }
 
         /**
+         * @param {Object} memoData
+         */
+
+    }, {
+        key: 'removeMemoCard',
+        value: function removeMemoCard(memoData) {
+            var memoList = this.state.memoList;
+            for (var i = 0; i < memoList.length; i++) {
+                if (memoData.key === memoList[i].key) {
+                    memoList.splice(i, 1);
+                }
+            }
+            this.setState({
+                memoList: memoList,
+                editorData: {
+                    key: 0,
+                    title: '',
+                    contents: ''
+                }
+            });
+        }
+
+        /**
          * @return {ReactComponent} 
          */
 
@@ -22345,6 +22393,8 @@ var App = function (_React$Component) {
                     // メソッドを渡す。archiveListはそのままarchiveCardに
                     // 横流しする
                     , handleMemoArchiveListClick: this.sendCardToEditor
+                    // 削除用のハンドラ
+                    , handleTrashIconClick: this.removeMemoCard
                 }),
                 _react2.default.createElement(_MemoEditor2.default, {
                     memoData: this.state.editorData,

@@ -14,6 +14,7 @@ export default class MemoArchiveCard extends React.Component {
         this.memoData = this.props.memoData;
 
         this.archiveCardClick = this.archiveCardClick.bind(this);
+        this.trashIconClick = this.trashIconClick.bind(this);
     }
 
     /**
@@ -36,7 +37,13 @@ export default class MemoArchiveCard extends React.Component {
         this.props.handleMemoClick(this.memoData);
     }
 
-    
+    /**
+     * @param {React.Event} e
+     */
+    trashIconClick(e) {
+        this.props.handleTrashIconClick(this.memoData);
+    }
+
     /**
      * @return {ReactComponent} 
      */
@@ -44,12 +51,16 @@ export default class MemoArchiveCard extends React.Component {
         return (
             <section onClick={this.archiveCardClick}>
                 {/* タイトル */}
+                <nav>
+                    <span className="icon_delete">
+                        <a onClick={this.trashIconClick}>
+                            <i className="fa fa-trash-o"> </i>
+                        </a>
+                    </span>
+                </nav>
                 <header>
                     <span className="title_memo">
                         {this.memoData.title}
-                    </span>
-                    <span className="icon_delete">
-                        <a href="#"></a>
                     </span>
                 </header>
                 <div>

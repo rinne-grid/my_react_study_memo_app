@@ -56,6 +56,7 @@ class App extends React.Component {
         this.sendCardToEditor = this.sendCardToEditor.bind(this);
         this.saveCardToState = this.saveCardToState.bind(this);
         this.addMemoCard = this.addMemoCard.bind(this);
+        this.removeMemoCard = this.removeMemoCard.bind(this);
     }
 
     /**
@@ -112,6 +113,26 @@ class App extends React.Component {
     }
 
     /**
+     * @param {Object} memoData
+     */
+    removeMemoCard(memoData) {
+        let memoList = this.state.memoList;
+        for(let i = 0; i < memoList.length; i++) {
+            if(memoData.key === memoList[i].key) {
+                memoList.splice(i, 1);
+            }
+        }
+        this.setState({
+            memoList: memoList,
+            editorData: {
+                key: 0,
+                title: '',
+                contents: '',
+            },
+        });
+    }
+
+    /**
      * @return {ReactComponent} 
      */
     render() {
@@ -125,6 +146,8 @@ class App extends React.Component {
                     // メソッドを渡す。archiveListはそのままarchiveCardに
                     // 横流しする
                     handleMemoArchiveListClick={this.sendCardToEditor}
+                    // 削除用のハンドラ
+                    handleTrashIconClick={this.removeMemoCard}
                 />
                 {/* Editorデータが存在する場合のみ表示される */}
                 <MemoEditor 

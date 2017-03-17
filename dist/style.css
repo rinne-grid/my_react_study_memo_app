@@ -41,8 +41,11 @@ main {
     height: calc(20% - 10px);
     border-bottom: 1px solid #ddd;
     padding: 20px; }
-    .area_archive section icon_delete {
+    .area_archive section nav {
+      width: 100%;
       text-align: right; }
+      .area_archive section nav a {
+        color: #550000; }
     .area_archive section:hover {
       background-color: #40AAEF;
       cursor: pointer; }
@@ -50,12 +53,38 @@ main {
     font-weight: bold; }
 
 .area_editor {
-  width: 60vh;
+  width: 65%;
   justify-content: flex-start;
   align-items: flex-start;
   padding-top: 20px;
   padding-left: 20px;
   padding-right: -20px;
   padding-bottom: -20px; }
+  .area_editor input {
+    font-size: 3.0rem;
+    width: 100%;
+    color: #0E7AC4;
+    border: none;
+    border-bottom: 1px solid #ddd; }
+    .area_editor input:focus {
+      outline: none; }
+  .area_editor textarea {
+    margin-top: 20px;
+    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    width: 100%;
+    height: 80vh;
+    border: none; }
+    .area_editor textarea:focus {
+      outline: none; }
+  .area_editor button {
+    font-size: 1.0rem;
+    border-radius: 2px;
+    background: -webkit-linear-gradient(#ededed 5%, #dfdfdf 100%);
+    background: -moz-linear-gradient(#ededed 5%, #dfdfdf 100%);
+    background: -o-linear-gradient(#ededed 5%, #dfdfdf 100%);
+    background: linear-gradient(#ededed 5%, #dfdfdf 100%);
+    width: 100px;
+    border: 1px solid #ccc; }
 
 /*# sourceMappingURL=style.css.map*/

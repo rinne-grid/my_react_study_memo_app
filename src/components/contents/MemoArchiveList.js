@@ -21,6 +21,7 @@ export default class MemoArchiveList extends React.Component {
                 <MemoArchiveCard key={memo.key}
                     memoData={memo} 
                     handleMemoClick={this.props.handleMemoArchiveListClick}
+                    handleTrashIconClick={this.props.handleTrashIconClick}
                 />
             );
         });
