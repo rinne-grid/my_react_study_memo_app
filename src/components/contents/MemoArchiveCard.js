@@ -18,6 +18,17 @@ export default class MemoArchiveCard extends React.Component {
     }
 
     /**
+     * 
+     */
+    static get propTypes() {
+        return {
+            memoData: React.PropTypes.object,
+            handleMemoClick: React.PropTypes.func,
+            handleTrashIconClick: React.PropTypes.func,
+        };
+    }
+
+    /**
      * @param {String} str
      * @param {Number} length
      * @return {String} shortStr

@@ -13,6 +13,17 @@ export default class MemoArchiveList extends React.Component {
     }
 
     /**
+     * 
+     */
+    static get propTypes() {
+        return {
+            // memoList: React.PropTypes.object,
+            handleMemoArchiveListClick: React.PropTypes.func,
+            handleTrashIconClick: React.PropTypes.func,
+        };
+    }
+
+    /**
      * @return {React.Component} obj
      */
     render() {
